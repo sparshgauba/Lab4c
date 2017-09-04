@@ -20,7 +20,7 @@
 #define R0		100000
 #define MAX_LEN 50
 
-int PORTNO = 18000;
+int PORTNO = -1;
 int sockfd;
 char scale_opt = 'F';
 char id_num[10] = {0};
@@ -201,7 +201,6 @@ int main(int argc, char *argv[])
         {"scale" , required_argument, 0, 's' },
         {"id"    , required_argument, 0, 'i' },
         {"host"  , required_argument, 0, 'h' },
-	    {""	 , required_argument, 0, 'p' },
         {0       , 0                , 0, 0   }
     };
 
@@ -244,9 +243,10 @@ int main(int argc, char *argv[])
                 exit(1); //CHECK ERROR CODES
             }
         }
-        else if (val == 'p')
+        else
         {
             PORTNO = atoi(optarg);
+            optind++;
         }
     }
     if (PORTNO == -1)
@@ -256,8 +256,10 @@ int main(int argc, char *argv[])
     }
     if (host == NULL)
     {
-        host = (char *) calloc(strlen("131.179.192.136") + 1, sizeof(char));
-        strcpy (host, "131.179.192.136");
+        fprintf(stderr,"Error: host name/address not given\n");
+        exit(1);
+        //host = (char *) calloc(strlen("131.179.192.136") + 1, sizeof(char));
+        //strcpy (host, "131.179.192.136");
     }
 
 
