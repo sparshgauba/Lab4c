@@ -20,7 +20,7 @@
 #define R0		100000
 #define MAX_LEN 50
 
-int PORTNO = -1;
+int PORTNO = 18000;
 int sockfd;
 char scale_opt = 'F';
 char id_num[10] = {0};
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
         {"scale" , required_argument, 0, 's' },
         {"id"    , required_argument, 0, 'i' },
         {"host"  , required_argument, 0, 'h' },
-	{""	 , required_argument, 0, 'p' },
+	    {""	 , required_argument, 0, 'p' },
         {0       , 0                , 0, 0   }
     };
 
@@ -251,8 +251,8 @@ int main(int argc, char *argv[])
     }
     if (PORTNO == -1)
     {
-	fprintf(stderr, "Error: Port number not given\n");
-	exit(1);
+    	fprintf(stderr, "Error: Port number not given\n");
+    	exit(1);
     }
     if (host == NULL)
     {
