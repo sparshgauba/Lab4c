@@ -203,44 +203,51 @@ int main(int argc, char *argv[])
         {"host"  , required_argument, 0, 'h' },
         {0       , 0                , 0, 0   }
     };
-
     char val;
-    while ((val = getopt_long(argc, argv, "", longOptions, 0)) != -1)
+    while (optind < argc)
     {
-        if (val == 'p')
+        if ((val = getopt_long(argc, argv, "", longOptions, 0)) != -1)
         {
-            period = atoi(optarg);
-        }
-        else if (val == 'i')
-        {
-            if (strlen(optarg) != 9)
+            if (val == 'p')
             {
-                fprintf(stderr, "Error: Incorrect ID length\n");
-                exit(1); //CHECK ERROR CODES
+                period = atoi(optarg);
             }
-            strcpy(id_num, optarg);
-        }
-        else if (val == 'h')
-        {
-            host = (char *) calloc(strlen(optarg) + 1, sizeof(char));
-            strcpy(host, optarg);
-        }
-        else if (val == 's')
-        {
-            scale_opt = *optarg;
-            if (scale_opt != 'C' && scale_opt != 'F')
+            else if (val == 'i')
             {
-                fprintf(stderr, "Wrong scale option, default to F\n");
-                scale_opt = 'F';
+                if (strlen(optarg) != 9)
+                {
+                    fprintf(stderr, "Error: Incorrect ID length\n");
+                    exit(1); //CHECK ERROR CODES
+                }
+                strcpy(id_num, optarg);
             }
-        }
-        else if (val == 'l')
-        {
-        	log_opt = 1;
-            if ((log_fd = open(optarg, O_CREAT | O_WRONLY | O_TRUNC)) < 0)
+            else if (val == 'h')
             {
-                perror("Error opening log file");
-                exit(1); //CHECK ERROR CODES
+                host = (char *) calloc(strlen(optarg) + 1, sizeof(char));
+                strcpy(host, optarg);
+            }
+            else if (val == 's')
+            {
+                scale_opt = *optarg;
+                if (scale_opt != 'C' && scale_opt != 'F')
+                {
+                    fprintf(stderr, "Wrong scale option, default to F\n");
+                    scale_opt = 'F';
+                }
+            }
+            else if (val == 'l')
+            {
+                log_opt = 1;
+                if ((log_fd = open(optarg, O_CREAT | O_WRONLY | O_TRUNC)) < 0)
+                {
+                    perror("Error opening log file");
+                    exit(1); //CHECK ERROR CODES
+                }
+            }
+            else
+            {
+                fprintf(stderr, "Error: Invalid Argument\n");
+                exit(1);
             }
         }
         else
@@ -249,6 +256,7 @@ int main(int argc, char *argv[])
             optind++;
         }
     }
+    
     if (PORTNO == -1)
     {
     	fprintf(stderr, "Error: Port number not given\n");
