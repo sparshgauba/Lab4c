@@ -253,7 +253,7 @@ int main(int argc, char *argv[])
         else
         {
             printf("------------------------Port Number Option------------\n");
-            PORTNO = atoi(optarg);
+            PORTNO = atoi(argv[optind]);
             optind++;
             printf("------------------------Port Number Got Past------------\n");
         }
