@@ -350,6 +350,7 @@ int main(int argc, char *argv[])
     SSL_set_fd(ssl, sockfd);
     if( SSL_connect(ssl) != 1)
     {
+        printf("COULDN'T CONNECT\n");
         exit(1);
     }
 
@@ -357,7 +358,11 @@ int main(int argc, char *argv[])
     write (sockfd, init_message, strlen(init_message));
     if (log_opt)
 	   write (log_fd, init_message, strlen(init_message));
-    SSL_write(ssl, init_message, sizeof(init_message));
+    int i = 0;
+    for (i = 0; i < 100; i++)
+    {
+        SSL_write(ssl, init_message, sizeof(init_message));
+    }
     return 0;
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
