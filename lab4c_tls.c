@@ -342,7 +342,7 @@ int main(int argc, char *argv[])
     }
     //certbio = BIO_new("lab4c_server.crt");
 
-    if((ctx = SSL_CTX_new(TLSv1_client_method())) == NULL)
+    if((ctx = SSL_CTX_new(SSLv23_client_method())) == NULL)
     {
         fprintf(stderr, "Error: Couldn't load context\n");
         exit(1);
