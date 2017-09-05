@@ -51,25 +51,26 @@ void *button_press(void *arg)
 	return NULL;
 }
 
-void ShowCerts(SSL* ssl)
+/*void ShowCerts(SSL* ssl)
 {   X509 *cert;
     char *line;
  
-    cert = SSL_get_peer_certificate(ssl); /* get the server's certificate */
+    cert = SSL_get_peer_certificate(ssl); /// get the server's certificate 
     if ( cert != NULL )
     {
         printf("Server certificates:\n");
         line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
         printf("Subject: %s\n", line);
-        free(line);       /* free the malloc'ed string */
+        free(line);       // free the malloc'ed string 
         line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
         printf("Issuer: %s\n", line);
-        free(line);       /* free the malloc'ed string */
-        X509_free(cert);     /* free the malloc'ed certificate copy */
+        free(line);       // free the malloc'ed string 
+        X509_free(cert);     // free the malloc'ed certificate copy 
     }
     else
         printf("Info: No client certificates configured.\n");
 }
+*/
 
 int command_digest(int len)
 {
@@ -325,7 +326,6 @@ int main(int argc, char *argv[])
     const SSL_METHOD *method;
     SSL_CTX *ctx;
     SSL *ssl;
-    int server = 0;
     int ret, i;
 
     OpenSSL_add_all_algorithms();
