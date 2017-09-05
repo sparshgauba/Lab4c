@@ -385,7 +385,7 @@ int main(int argc, char *argv[])
 	t_ptr = localtime(&local_time);
 	sprintf(output, "%.2d:%.2d:%.2d SHUTDOWN\n", t_ptr->tm_hour, t_ptr->tm_min, t_ptr->tm_sec);
 	printf("%s", output);
-    	ssl_write (sockfd, output, strlen(output));
+    	ssl_write (ssl, output, strlen(output));
 	if(log_opt)
 	{
 		write(log_fd, output, strlen(output));

@@ -9,11 +9,8 @@ run_tls:
 	./lab4c_tls --id=204600605 --host=131.179.192.136 --log=logfile.txt 19000
 
 clean:
-	rm *.txt lab4b *.tar.gz lab4c_tcp
-
-check:
-	./lab4b --log=logfile.txt --scale=C --period=2
+	rm *.txt *.tar.gz lab4c_tcp lab4c_tls
 
 dist:
-	tar -zcvf lab4b-204600605.tar.gz lab4b.c README Makefile
+	tar -zcvf lab4c-204600605.tar.gz lab4c_tcp.c lab4c_tls.c README Makefile
 
