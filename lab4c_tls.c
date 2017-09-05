@@ -51,6 +51,26 @@ void *button_press(void *arg)
 	return NULL;
 }
 
+void ShowCerts(SSL* ssl)
+{   X509 *cert;
+    char *line;
+ 
+    cert = SSL_get_peer_certificate(ssl); /* get the server's certificate */
+    if ( cert != NULL )
+    {
+        printf("Server certificates:\n");
+        line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
+        printf("Subject: %s\n", line);
+        free(line);       /* free the malloc'ed string */
+        line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
+        printf("Issuer: %s\n", line);
+        free(line);       /* free the malloc'ed string */
+        X509_free(cert);     /* free the malloc'ed certificate copy */
+    }
+    else
+        printf("Info: No client certificates configured.\n");
+}
+
 int command_digest(int len)
 {
     char *compare[] = {"START", "STOP", "OFF", "SCALE=C", "SCALE=F", "PERIOD="};
@@ -298,8 +318,18 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    //BIO              *certbio = NULL;
+    //BIO               *outbio = NULL;
+    //X509                *cert = NULL;
+    //X509_NAME       *certname = NULL;
+    const SSL_METHOD *method;
+    SSL_CTX *ctx;
+    SSL *ssl;
+    int server = 0;
+    int ret, i;
+
     OpenSSL_add_all_algorithms();
-    ERR_load_BIO_strings();
+    //ERR_load_BIO_strings();
     ERR_load_crypto_strings();
     SSL_load_error_strings();
 
@@ -309,24 +339,26 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    method = TLSv1_client_method();
+    method = SSLv23_client_method();
+    //certbio = BIO_new("lab4c_server.crt");
 
     if((ctx = SSL_CTX_new(method)) == NULL)
-        exit_1("Could not create new context structure.");
+        exit(1);
 
       ssl = SSL_new(ctx);
 
     SSL_set_fd(ssl, sockfd);
     if( SSL_connect(ssl) != 1)
-        exit_1("Could not build an SSL session.");
-
-    char message[] = {"ID=204600605\n"};
+    {
+        exit(1);
+    }
 
     char init_message[] = "ID=204600605\n";
     write (sockfd, init_message, strlen(init_message));
     if (log_opt)
 	   write (log_fd, init_message, strlen(init_message));
     SSL_write(ssl, init_message, sizeof(init_message));
+    return 0;
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
 	pthread_create(&input_thread, NULL, &user_input, NULL);
