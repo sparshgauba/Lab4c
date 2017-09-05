@@ -206,7 +206,8 @@ int main(int argc, char *argv[])
     char val;
     while (optind < argc)
     {
-        if (val = getopt_long(argc, argv, "", longOptions, 0))
+        printf("------------OPTIND = %d------------\n", optind);
+        if ((val = getopt_long(argc, argv, "", longOptions, 0)) != -1)
         {
             if (val == 'p')
             {
@@ -255,6 +256,7 @@ int main(int argc, char *argv[])
             PORTNO = atoi(argv[optind]);
             optind++;
         }
+        printf("------------------Value of val = %c-----------\n", val);
     }
     
     if (PORTNO == -1)
