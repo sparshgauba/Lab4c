@@ -76,7 +76,7 @@ int command_digest(int len)
 				{
 					write(log_fd, cmd, strlen(cmd));
 				}
-                //write(sockfd, cmd, strlen(cmd));
+                SSL_write(sockfd, cmd, strlen(cmd));
 
 				stop = 0;
                 ptr += 6;
@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
 		sprintf(output, "%.2d:%.2d:%.2d %0.1f\n", t_ptr->tm_hour, t_ptr->tm_min, t_ptr->tm_sec, temp);
 		
 		printf("%s", output);
-       		write (sockfd, output, strlen(output));
+       		SSL_write (ssl, output, strlen(output));
 		if(log_opt)
 		{
 			write (log_fd, output, strlen(output));
@@ -385,7 +385,7 @@ int main(int argc, char *argv[])
 	t_ptr = localtime(&local_time);
 	sprintf(output, "%.2d:%.2d:%.2d SHUTDOWN\n", t_ptr->tm_hour, t_ptr->tm_min, t_ptr->tm_sec);
 	printf("%s", output);
-    	write (sockfd, output, strlen(output));
+    	ssl_write (sockfd, output, strlen(output));
 	if(log_opt)
 	{
 		write(log_fd, output, strlen(output));
