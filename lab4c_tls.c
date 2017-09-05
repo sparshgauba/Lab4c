@@ -98,7 +98,7 @@ int command_digest(int len)
 				{
 					write(log_fd, cmd, strlen(cmd));
 				}
-                SSL_write(sockfd, cmd, strlen(cmd));
+                //SSL_write(sockfd, cmd, strlen(cmd));
 
 				stop = 0;
                 ptr += 6;
