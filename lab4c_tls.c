@@ -370,7 +370,7 @@ int main(int argc, char *argv[])
     //return 0;
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
-	pthread_create(&input_thread, NULL, &user_input, NULL);
+	//pthread_create(&input_thread, NULL, &user_input, NULL);
 	
 	while(!shutdown_flag)
 	{
