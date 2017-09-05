@@ -14,7 +14,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
-#include <openssl/applink.c>
+//#include <openssl/applink.c>
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
 #include <openssl/tls1.h>
