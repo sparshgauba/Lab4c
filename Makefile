@@ -3,7 +3,7 @@ default:
 	gcc -lmraa -lm -pthread -Wall -g -o lab4c_tcp lab4c_tcp.c
 
 run_tcp:
-	./lab4c_tcp --id=204600605 --host=131.179.192.136 --log=logfile.txt 18000
+	./lab4c_tcp 18000 --id=204600605 --host=131.179.192.136 --log=logfile.txt
 
 run_tls:
 	./lab4c_tls --id=204600605 --host=131.179.192.136 --log=logfile.txt 19000
