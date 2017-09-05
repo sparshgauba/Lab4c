@@ -34,6 +34,11 @@ int shutdown_flag = 0;
 int stop = 0;
 int period = 1;
 char command[MAX_LEN] = {0};
+
+const SSL_METHOD *method;
+SSL_CTX *ctx;
+SSL *ssl;
+
 pthread_t button_thread;
 pthread_t input_thread;
 pthread_mutex_t mutex;
@@ -192,7 +197,8 @@ void *user_input()
         poll(&u_input, 1, -1);
         if (u_input.revents == POLLIN)
         {
-            read_count += read(sockfd, (command + offset), 68);
+            read_count += SSL_read(ssl, (command + offset), 68);
+
             offset = command_digest(read_count);
             if(offset == -1)
             {
@@ -323,9 +329,7 @@ int main(int argc, char *argv[])
     //BIO               *outbio = NULL;
     //X509                *cert = NULL;
     //X509_NAME       *certname = NULL;
-    const SSL_METHOD *method;
-    SSL_CTX *ctx;
-    SSL *ssl;
+    
 
     OpenSSL_add_all_algorithms();
     //ERR_load_BIO_strings();
@@ -359,11 +363,11 @@ int main(int argc, char *argv[])
     if (log_opt)
 	   write (log_fd, init_message, strlen(init_message));
     int i = 0;
-    for (i = 0; i < 100; i++)
-    {
+    //for (i = 0; i < 100; i++)
+    //{
         SSL_write(ssl, init_message, sizeof(init_message));
-    }
-    return 0;
+    //}
+    //return 0;
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
 	pthread_create(&input_thread, NULL, &user_input, NULL);
