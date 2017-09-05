@@ -4,21 +4,12 @@ ID:204600605
 
 LAB 4B README
 
-lab4b.c
-    This file contains the implementation for the lab. It 
-    uses the mraa library functions to read raw input from
-    the temperature sensor as well as the digital state
-    of the button attached to the GPIO connection. Using
-    a continuous while loop, it prints out the time stamp
-    using time.h library and the corresponding temperature
-    reading. Using a separate thread, it keeps a check on 
-    the value of the button, and if pressed, breaks out of
-    the main continuous loop and exits after printing out 
-    the last temperature reading. Lastly, another thread
-    utilizes the poll() function in order to detect an
-    input from the user via STDIN and parses the input for 
-    commands, and takes appropriate actions based on the 
-    commands.
+lab4c_tcp.c
+    This file contains the implementation for part one of
+    the lab. It uses the mraa library functions to read
+    raw input from the temperature sensor as well as the
+    digital state of the button attached to the GPIO
+    connection. Sends data to the TCP server. 
 
 Makefile
     Contains the default target for compiling the code as

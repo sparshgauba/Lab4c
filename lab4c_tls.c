@@ -17,7 +17,10 @@
 //#include <openssl/applink.c>
 #include <openssl/bio.h>
 #include <openssl/ssl.h>
-#include <openssl/tls1.h>
+#include <openssl/err.h>
+#include <openssl/pem.h>
+#include <openssl/x509.h>
+#include <openssl/x509_vfy.h>
 
 
 #define B 		4275
@@ -55,6 +58,25 @@ void *button_press(void *arg)
 	return NULL;
 }
 
+void ShowCerts(SSL* ssl)
+{   X509 *cert;
+    char *line;
+
+    cert = SSL_get_peer_certificate(ssl);   /* get the server's certificate */
+    if ( cert != NULL )
+    {
+        printf("Server certificates:\n");
+        line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
+        printf("Subject: %s\n", line);
+        free(line);                         /* free the malloc'ed string */
+        line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
+        printf("Issuer: %s\n", line);
+        free(line);                         /* free the malloc'ed string */
+        X509_free(cert);                    /* free the malloc'ed certificate copy */
+    }
+    else
+        printf("No certificates.\n");
+}
 
 int command_digest(int len)
 {
@@ -311,10 +333,8 @@ int main(int argc, char *argv[])
     
 
     OpenSSL_add_all_algorithms();
-    //ERR_load_BIO_strings();
-    ERR_load_crypto_strings();
     SSL_load_error_strings();
-
+    //ERR_load_BIO_strings();
     if(SSL_library_init() < 0)
     {
         fprintf(stderr, "Error: Couldn't initialize OpenSSL\n");
@@ -337,6 +357,7 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    ShowCerts(ssl); 
     char init_message[] = "ID=204600605\n";
     write (sockfd, init_message, strlen(init_message));
     if (log_opt)
