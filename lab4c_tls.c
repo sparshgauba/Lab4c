@@ -329,23 +329,24 @@ int main(int argc, char *argv[])
     int ret, i;
 
     OpenSSL_add_all_algorithms();
-    //ERR_load_BIO_strings();
-    ERR_load_crypto_strings();
-    SSL_load_error_strings();
+    //ERR_load_BIO_strings();
+    ERR_load_crypto_strings();
+    SSL_load_error_strings();
 
-    if(SSL_library_init() < 0)
+    if(SSL_library_init() < 0)
     {
         fprintf(stderr, "Error: Couldn't initialize OpenSSL\n")
         exit(1);
     }
-
-    method = SSLv23_client_method();
+    method = SSLv23_client_method();
     //certbio = BIO_new("lab4c_server.crt");
 
     if((ctx = SSL_CTX_new(method)) == NULL)
-        exit(1);
+    {
+        exit(1);
+    }
 
-      ssl = SSL_new(ctx);
+    ssl = SSL_new(ctx);
 
     SSL_set_fd(ssl, sockfd);
     if( SSL_connect(ssl) != 1)
