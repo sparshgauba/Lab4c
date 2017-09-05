@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
     char val;
     while (optind < argc)
     {
-        if ((val = getopt_long(argc, argv, "", longOptions, 0)) != -1)
+        if (val = getopt_long(argc, argv, "", longOptions, 0))
         {
             if (val == 'p')
             {
