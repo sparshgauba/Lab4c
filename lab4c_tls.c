@@ -35,7 +35,6 @@ int stop = 0;
 int period = 1;
 char command[MAX_LEN] = {0};
 
-const SSL_METHOD *method;
 SSL_CTX *ctx;
 SSL *ssl;
 
@@ -56,26 +55,6 @@ void *button_press(void *arg)
 	return NULL;
 }
 
-/*void ShowCerts(SSL* ssl)
-{   X509 *cert;
-    char *line;
- 
-    cert = SSL_get_peer_certificate(ssl); /// get the server's certificate 
-    if ( cert != NULL )
-    {
-        printf("Server certificates:\n");
-        line = X509_NAME_oneline(X509_get_subject_name(cert), 0, 0);
-        printf("Subject: %s\n", line);
-        free(line);       // free the malloc'ed string 
-        line = X509_NAME_oneline(X509_get_issuer_name(cert), 0, 0);
-        printf("Issuer: %s\n", line);
-        free(line);       // free the malloc'ed string 
-        X509_free(cert);     // free the malloc'ed certificate copy 
-    }
-    else
-        printf("Info: No client certificates configured.\n");
-}
-*/
 
 int command_digest(int len)
 {
@@ -189,7 +168,7 @@ void *user_input()
 	int read_count = 0;
     int offset = 0;
     struct pollfd u_input;
-    u_input.fd = sockfd;
+    u_input.fd = ssl;
     u_input.events = POLLIN;
 
     while (1)
@@ -341,11 +320,11 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error: Couldn't initialize OpenSSL\n");
         exit(1);
     }
-    method = SSLv23_client_method();
     //certbio = BIO_new("lab4c_server.crt");
 
-    if((ctx = SSL_CTX_new(method)) == NULL)
+    if((ctx = SSL_CTX_new(TLSv1_client_method())) == NULL)
     {
+        fprintf(stderr, "Error: Couldn't load context\n");
         exit(1);
     }
 
@@ -363,11 +342,11 @@ int main(int argc, char *argv[])
     if (log_opt)
 	   write (log_fd, init_message, strlen(init_message));
     int i = 0;
-    //for (i = 0; i < 100; i++)
-    //{
-        SSL_write(ssl, init_message, sizeof(init_message));
-    //}
-    //return 0;
+    for (i = 0; i < 10; i++)
+    {
+        SSL_write(ssl, init_message, strlen(init_message));
+    }
+    return 0;
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
 	pthread_create(&input_thread, NULL, &user_input, NULL);
