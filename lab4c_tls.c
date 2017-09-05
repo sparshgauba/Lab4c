@@ -14,6 +14,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
+#include <openssl/applink.c>
+#include <openssl/bio.h>
+#include <openssl/ssl.h>
+#include <openssl/tls1.h>
 
 
 #define B 		4275
@@ -270,7 +274,6 @@ int main(int argc, char *argv[])
         //strcpy (host, "131.179.192.136");
     }
 
-
     struct sockaddr_in serv_addr;
     struct hostent *server;
 
@@ -295,10 +298,35 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    OpenSSL_add_all_algorithms();
+    ERR_load_BIO_strings();
+    ERR_load_crypto_strings();
+    SSL_load_error_strings();
+
+    if(SSL_library_init() < 0)
+    {
+        fprintf(stderr, "Error: Couldn't initialize OpenSSL\n")
+        exit(1);
+    }
+
+    method = TLSv1_client_method();
+
+    if((ctx = SSL_CTX_new(method)) == NULL)
+        exit_1("Could not create new context structure.");
+
+      ssl = SSL_new(ctx);
+
+    SSL_set_fd(ssl, sockfd);
+    if( SSL_connect(ssl) != 1)
+        exit_1("Could not build an SSL session.");
+
+    char message[] = {"ID=204600605\n"};
+
     char init_message[] = "ID=204600605\n";
     write (sockfd, init_message, strlen(init_message));
     if (log_opt)
-	write (log_fd, init_message, strlen(init_message));
+	   write (log_fd, init_message, strlen(init_message));
+    SSL_write(ssl, init_message, sizeof(init_message));
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
 	pthread_create(&input_thread, NULL, &user_input, NULL);
