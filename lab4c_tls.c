@@ -326,7 +326,6 @@ int main(int argc, char *argv[])
     const SSL_METHOD *method;
     SSL_CTX *ctx;
     SSL *ssl;
-    int ret, i;
 
     OpenSSL_add_all_algorithms();
     //ERR_load_BIO_strings();
@@ -335,7 +334,7 @@ int main(int argc, char *argv[])
 
     if(SSL_library_init() < 0)
     {
-        fprintf(stderr, "Error: Couldn't initialize OpenSSL\n")
+        fprintf(stderr, "Error: Couldn't initialize OpenSSL\n");
         exit(1);
     }
     method = SSLv23_client_method();
