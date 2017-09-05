@@ -180,6 +180,7 @@ void *user_input()
 
 int main(int argc, char *argv[])
 {
+    PORTNO = atoi(argv[1]);
 	//uint16_t value = 0;
 	mraa_aio_context tmpr = mraa_aio_init(0);
 	mraa_gpio_context button = mraa_gpio_init(3);
@@ -207,7 +208,7 @@ int main(int argc, char *argv[])
     while (optind < argc)
     {
         val = getopt_long(argc, argv, "", longOptions, 0);
-        printf("------------OPTIND = %d------------\n", optind);
+        //printf("------------OPTIND = %d------------\n", optind);
         if (val == 'p' || val == 'l' || val == 's' || val == 'i' || val == 'h')
         {
             if (val == 'p')
@@ -257,7 +258,7 @@ int main(int argc, char *argv[])
             PORTNO = atoi(argv[optind]);
             optind++;
         }
-        printf("------------------Value of val = %c-----------\n", val);
+        //printf("------------------Value of val = %c-----------\n", val);
     }
     
     if (PORTNO == -1)
