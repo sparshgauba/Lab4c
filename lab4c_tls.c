@@ -190,7 +190,7 @@ void *user_input()
 	int read_count = 0;
     int offset = 0;
     struct pollfd u_input;
-    u_input.fd = ssl;
+    u_input.fd = sockfd;
     u_input.events = POLLIN;
 
     while (1)
@@ -362,12 +362,12 @@ int main(int argc, char *argv[])
     write (sockfd, init_message, strlen(init_message));
     if (log_opt)
 	   write (log_fd, init_message, strlen(init_message));
-    int i = 0;
-    for (i = 0; i < 10; i++)
-    {
+    //int i = 0;
+    //for (i = 0; i < 10; i++)
+    //{
         SSL_write(ssl, init_message, strlen(init_message));
-    }
-    return 0;
+    //}
+    //return 0;
 
 	pthread_create(&button_thread, NULL, &button_press, (void *)button);
 	pthread_create(&input_thread, NULL, &user_input, NULL);
@@ -406,7 +406,7 @@ int main(int argc, char *argv[])
 	t_ptr = localtime(&local_time);
 	sprintf(output, "%.2d:%.2d:%.2d SHUTDOWN\n", t_ptr->tm_hour, t_ptr->tm_min, t_ptr->tm_sec);
 	printf("%s", output);
-    	ssl_write (ssl, output, strlen(output));
+    	SSL_write (ssl, output, strlen(output));
 	if(log_opt)
 	{
 		write(log_fd, output, strlen(output));
