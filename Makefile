@@ -4,7 +4,9 @@ default:
 
 run_tcp:
 	./lab4c_tcp --id=204600605 --host=131.179.192.136 --log=logfile.txt 18000
-	./lab4c_tcp --id=204600605 --host=131.179.192.136 --log=logfile.txt 19000
+
+run_tls:
+	./lab4c_tls --id=204600605 --host=131.179.192.136 --log=logfile.txt 19000
 
 clean:
 	rm *.txt lab4b *.tar.gz lab4c_tcp
